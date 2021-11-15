@@ -1,0 +1,17 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2em;
+  max-width: 400px;
+
+  h1 {
+    color: #ef7c8e;
+    font-size: 3em;
+  }
+
+  button {
+    font-weight: 600;
+  }
+}

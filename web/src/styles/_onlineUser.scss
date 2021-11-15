@@ -1,0 +1,66 @@
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba($color: #000000, $alpha: 0.75);
+  transition: all 0.3s ease-out;
+  display: none;
+}
+
+.opened {
+  @include flex-center;
+}
+
+.online-user {
+  border-radius: 10px;
+  padding: 1.5rem;
+  background-color: $primary-color;
+  position: relative;
+
+  .back {
+    position: absolute;
+    cursor: pointer;
+    top: 20px;
+    right: 20px;
+
+    &:hover {
+      @include bounce;
+    }
+  }
+}
+
+.user-info {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  margin-top: 0.7rem;
+  gap: 1.3rem;
+  transition: all 0.3s ease-out;
+
+  img {
+    border-radius: 50%;
+    grid-column: span 1 / span 1;
+  }
+
+  .user-detail {
+    grid-column: span 3 / span 3;
+    h3 {
+      font-size: 1rem;
+      font-weight: 500;
+
+      span {
+        font-size: 0.7rem;
+        margin-left: 10px;
+        color: rgb(42, 209, 117);
+      }
+    }
+    h4 {
+      font-size: 0.8rem;
+      font-weight: 400;
+    }
+  }
+}

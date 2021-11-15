@@ -1,0 +1,173 @@
+.song {
+  @include flex-center;
+  position: relative;
+  grid-column: span 3 / span 3;
+  flex-direction: column;
+
+  img {
+    @include shadow;
+    border-radius: 50%;
+  }
+}
+
+.detail {
+  @include flex-center;
+  margin-top: 1rem;
+  flex-direction: column;
+  width: 100%;
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+}
+
+.control-panel {
+  width: 100%;
+}
+
+.time-control {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+
+  p {
+    color: $font-secondary-color;
+    font-size: 0.8rem;
+  }
+}
+
+.play-control {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 2rem 0;
+  width: 100%;
+  padding: 1rem;
+
+  svg {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      transform: translateY(-5%);
+    }
+  }
+}
+
+.host-online {
+  @include notification(rgb(42, 209, 117), $online: true);
+}
+
+.host-offline {
+  @include notification(rgb(233, 77, 56), $online: false);
+}
+
+.track {
+  width: 100%;
+  height: 0.25rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #654ea3; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #eaafc8,
+    #654ea3
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #eaafc8,
+    #654ea3
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  input {
+    width: 100%;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+}
+
+.animate-track {
+  background: rgb(205, 205, 205);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(0%);
+  padding: 1rem;
+  pointer-events: none;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  svg {
+    cursor: pointer;
+
+    &:hover {
+      @include bounce;
+    }
+  }
+}
+
+.spinicon {
+  animation: spin 1s linear infinite;
+  width: 3rem;
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  circle {
+    opacity: 0.25;
+  }
+
+  path {
+    opacity: 0.75;
+  }
+}
+
+.loading-songpage {
+  display: grid;
+  row-gap: 2rem;
+  justify-items: center;
+
+  span {
+    @include load-animation;
+    background-color: transparent;
+    font-size: 1.5rem;
+    margin-left: 0.2rem;
+  }
+}
+
+.mute {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

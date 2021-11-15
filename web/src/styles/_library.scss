@@ -1,0 +1,106 @@
+@mixin song-mixin {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+  border-radius: 5px;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  margin-top: 0.7rem;
+  gap: 1.3rem;
+
+  @media screen and (max-width: $max-w-md) {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+  @media screen and (max-width: $max-w-sm) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@mixin descrip-mixin {
+  grid-column: span 4 / span 4;
+  h3 {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  h4 {
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: $font-secondary-color;
+  }
+}
+
+.library {
+  grid-column: span 2 / span 2;
+  width: 100%;
+  overflow: scroll;
+
+  h2 {
+    margin: 1.2rem 0;
+    span {
+      font-size: 0.7rem;
+      margin-left: 10px;
+      font-weight: 500;
+    }
+  }
+}
+
+.library-song {
+  @include song-mixin;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+
+  img {
+    border-radius: 10%;
+    grid-column: span 1 / span 1;
+  }
+
+  &:hover {
+    background-color: $secondary-color;
+    transform: translateX(1%);
+  }
+
+  @media screen and (max-width: $max-w-md) {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+  @media screen and (max-width: $max-w-sm) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.song-description {
+  @include descrip-mixin;
+}
+
+.selected {
+  background-color: $secondary-color;
+}
+
+.loading-song {
+  @include song-mixin;
+
+  .loading-image {
+    @include load-animation;
+    grid-column: span 1 / span 1;
+    height: 50px;
+    width: 50px;
+    border-radius: 10%;
+  }
+
+  .loading-descrip {
+    @include descrip-mixin;
+
+    h3 {
+      @include load-animation;
+      border-radius: 5px;
+      width: 8rem;
+      height: 1rem;
+    }
+
+    h4 {
+      @include load-animation;
+      margin-top: 10px;
+      border-radius: 5px;
+      width: 14rem;
+      height: 1.2rem;
+    }
+  }
+}
