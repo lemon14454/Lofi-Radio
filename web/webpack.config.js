@@ -66,6 +66,12 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("production"),
+        APIKEY: JSON.stringify(process.env.APIKEY),
+        AUTHDOMAIN: JSON.stringify(process.env.AUTHDOMAIN),
+        PROJECTID: JSON.stringify(process.env.PROJECTID),
+        STORAGEBUCKET: JSON.stringify(process.env.STORAGEBUCKET),
+        MESSAGINGSENDERID: JSON.stringify(process.env.MESSAGINGSENDERID),
+        APPID: JSON.stringify(process.env.APPID),
       },
     }),
     new Dotenv(),
