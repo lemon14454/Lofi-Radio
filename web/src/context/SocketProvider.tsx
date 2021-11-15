@@ -10,7 +10,7 @@ interface ProviderProps {
 }
 
 // const SERVER_URL = "http://localhost:5000";
-const SERVER_URL = "https://lemon-lofiradio.herokuapp.app/";
+const SERVER_URL = "https://lemon-lofiradio.herokuapp.com";
 
 const SocketContext = createContext<ContextInterface | null>(null);
 
