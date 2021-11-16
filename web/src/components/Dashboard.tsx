@@ -4,21 +4,17 @@ import OnlineUser from "./OnlineUser";
 import Song from "./Song";
 
 const Dashboard = () => {
-  const { audioRef, activeSong, timeUpdateHandler, nextSongHandler } =
-    usePlayer()!;
+  const { audioRef, timeUpdateHandler, nextSongHandler } = usePlayer()!;
 
   return (
     <div className="dashboard">
-      {activeSong && (
-        <audio
-          ref={audioRef}
-          src={activeSong.audio}
-          onLoadedMetadata={timeUpdateHandler}
-          onTimeUpdate={timeUpdateHandler}
-          onEnded={nextSongHandler}
-          muted
-        />
-      )}
+      <audio
+        ref={audioRef}
+        onLoadedMetadata={timeUpdateHandler}
+        onTimeUpdate={timeUpdateHandler}
+        onEnded={nextSongHandler}
+        muted
+      />
       <Song />
       <Library />
       <OnlineUser />

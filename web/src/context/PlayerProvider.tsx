@@ -13,9 +13,9 @@ import { useAuth } from "./AuthProvider";
 import { useSocket } from "./SocketProvider";
 
 interface SocketRequestProps {
-  activeSongIO: SongType;
-  isPlayingIO: boolean;
-  songInfoIO: SongInfoType;
+  activeSongIO?: SongType;
+  isPlayingIO?: boolean;
+  songInfoIO?: SongInfoType;
 }
 
 interface ContextInterface {
@@ -57,58 +57,61 @@ export function PlayerProvider({ children }: ProviderProps) {
 
   const fetchSongs = async () => {
     const { songsData } = await getAllSongs();
+    audioRef.current.src = songsData[0].audio;
     setSongs(songsData);
     setActiveSong(songsData[0]);
   };
 
   // 獲取歌曲資料，每次登入只需執行一次
   useEffect(() => {
-    if (user) {
+    if (user && audioRef.current) {
       fetchSongs();
     }
   }, [user]);
 
   // Socket Request
-  const socketRequest = async ({
-    activeSongIO,
-    isPlayingIO,
-    songInfoIO,
-  }: SocketRequestProps) => {
+  const socketRequest = (Props: SocketRequestProps) => {
     // 是 host 才能控制音樂面板
     if (user && user.host) {
-      socket!.emit("player", { activeSongIO, isPlayingIO, songInfoIO });
+      socket!.emit("player", Props);
     }
   };
 
   // 播放 暫停
-  const playAndPauseMusicHandler = async () => {
+  const playAndPauseMusicHandler = () => {
     socketRequest({
-      activeSongIO: activeSong,
       isPlayingIO: !isPlaying,
-      songInfoIO: songInfo,
     });
   };
 
   // 指定歌曲
-  const switchSongHandler = async (switchedSong: SongType) => {
+  const switchSongHandler = (switchedSong: SongType) => {
     if (activeSong !== switchedSong) {
       socketRequest({
         activeSongIO: switchedSong,
-        isPlayingIO: true,
+        isPlayingIO: false,
         songInfoIO: songInfo,
       });
+
+      setTimeout(
+        () =>
+          socketRequest({
+            isPlayingIO: true,
+          }),
+        300
+      );
     }
   };
 
   // 下一首
-  const nextSongHandler = async () => {
+  const nextSongHandler = () => {
     const nextSongIndex =
       (songs.findIndex((song) => song.id === activeSong.id) + 1) % songs.length;
     switchSongHandler(songs[nextSongIndex]);
   };
 
   // 上一首
-  const prevSongHandler = async () => {
+  const prevSongHandler = () => {
     const prevSongIndex =
       (songs.findIndex((song) => song.id === activeSong.id) -
         1 +
@@ -126,8 +129,6 @@ export function PlayerProvider({ children }: ProviderProps) {
       drag: true,
     };
     socketRequest({
-      activeSongIO: activeSong,
-      isPlayingIO: isPlaying,
       songInfoIO: newSongInfo,
     });
   };
@@ -144,16 +145,14 @@ export function PlayerProvider({ children }: ProviderProps) {
       ),
     };
     socketRequest({
-      activeSongIO: activeSong,
-      isPlayingIO: isPlaying,
       songInfoIO: newSongInfo,
     });
   };
 
   useEffect(() => {
-    if (!isHostOnline) {
+    if (!isHostOnline && audioRef.current) {
       setTimeout(() => {
-        audioRef.current!.pause();
+        audioRef.current.pause();
       }, 150);
     }
   }, [isHostOnline]);
@@ -162,26 +161,26 @@ export function PlayerProvider({ children }: ProviderProps) {
   useEffect(() => {
     if (socket) {
       socket.on("player", ({ activeSongIO, isPlayingIO, songInfoIO }) => {
-        setActiveSong(activeSongIO);
-        setIsPlaying(isPlayingIO);
-        setSongInfo(songInfoIO);
+        if (isPlayingIO !== undefined) {
+          if (isPlayingIO) {
+            audioRef.current.play();
+          } else {
+            audioRef.current.pause();
+          }
+          setIsPlaying(isPlayingIO);
+        }
+
+        if (activeSongIO) {
+          setActiveSong(activeSongIO);
+          audioRef.current.src = activeSongIO.audio;
+        }
+
+        if (songInfoIO) setSongInfo(songInfoIO);
 
         // 進行時間軸控制時觸發
-        if (songInfoIO.drag) {
-          audioRef.current!.currentTime = songInfoIO.currentTime;
+        if (songInfoIO && songInfoIO.drag) {
+          audioRef.current.currentTime = songInfoIO.currentTime;
         }
-
-        if (isPlayingIO) {
-          // 用 timeout 來避免 promise error
-          setTimeout(() => {
-            audioRef.current!.play();
-          }, 150);
-        } else {
-          setTimeout(() => {
-            audioRef.current!.pause();
-          }, 150);
-        }
-        // }
       });
     } else {
       return;

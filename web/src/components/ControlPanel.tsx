@@ -4,6 +4,7 @@ import { FaPlay, FaForward, FaBackward, FaPause, FaUser } from "react-icons/fa";
 import { HiStatusOffline, HiStatusOnline } from "react-icons/hi";
 import { GoMute, GoUnmute } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
+import { useState } from "react";
 
 // 播放鍵 上下一首 使用者管理權限認證
 const ControlPanel = () => {
@@ -18,6 +19,7 @@ const ControlPanel = () => {
   } = usePlayer()!;
 
   const { isHostOnline, user, signout, setModalOpen } = useAuth()!;
+  const [isMuted, setIsMuted] = useState(true);
 
   const getTime = (time: number) => {
     return (
@@ -60,8 +62,13 @@ const ControlPanel = () => {
       )}
 
       <div className="tools">
-        <div onClick={() => (audioRef.current.muted = !audioRef.current.muted)}>
-          {audioRef.current && audioRef.current.muted ? (
+        <div
+          onClick={() => {
+            audioRef.current.muted = !audioRef.current.muted;
+            setIsMuted(audioRef.current.muted);
+          }}
+        >
+          {isMuted ? (
             <div className="mute">
               <GoMute size={24} />
               <h6>您目前為靜音</h6>
